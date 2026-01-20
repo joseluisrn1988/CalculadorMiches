@@ -3,124 +3,206 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de Costos | MasterLab 🧪</title>
+    <title>Calculadora Pro | MasterLab 🧪</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        /* Mantenemos el diseño oscuro y acentos amarillos */
         body { background-color: #0f172a; color: white; font-family: sans-serif; }
         .card { background-color: #1e293b; border-radius: 1rem; padding: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
         .input-field { background-color: #334155; border: 1px solid #475569; color: white; padding: 0.5rem; border-radius: 0.5rem; width: 100%; }
         .accent-color { color: #facc15; } /* Amarillo MasterLab */
+        .label-ingrediente { font-size: 0.75rem; text-transform: uppercase; color: #facc15; font-weight: bold; margin-bottom: 0.25rem; display: block; }
     </style>
 </head>
-<body class="p-4 md:p-8">
-    <div class="max-w-2xl mx-auto">
-        <header class="text-center mb-8">
-            <h1 class="text-3xl font-bold accent-color">MasterLab 🧪</h1>
-            <p class="text-slate-400">Calculadora de Utilidad Real</p>
+<body class="p-4 md:p-8 pb-20">
+    <div class="max-w-2xl mx-auto grid gap-6">
+        <header class="text-center font-bold">
+            <h1 class="text-3xl accent-color">MasterLab 🧪</h1>
+            <p class="text-slate-400 text-lg">Calculadora de Precisión</p>
+            <div class="mt-2 bg-slate-800 inline-block px-3 py-1 rounded-full border border-slate-700">
+                <p class="text-xs text-slate-300">💡 Nota: 1 Cucharada estándar ≈ 15 ml</p>
+            </div>
         </header>
 
-        <div class="grid gap-6">
             
-            <div class="card">
+            <div class="card border-l-4 border-green-500">
                 <h2 class="text-xl font-semibold mb-4 flex items-center">🍋 El Factor Limón</h2>
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-sm mb-1">Costo por 1 Kg</label>
+                        <label class="block text-sm mb-1 text-slate-400">Costo por 1 Kg</label>
                         <input type="number" id="precioKg" placeholder="$" class="input-field" oninput="calcular()">
                     </div>
                     <div>
-                        <label class="block text-sm mb-1">¿Cuántos limones trae?</label>
+                        <label class="block text-sm mb-1 text-slate-400">¿Cuántos trae aprox?</label>
                         <input type="number" id="cantidadPorKg" placeholder="Ej. 20" class="input-field" oninput="calcular()">
                     </div>
                     <div class="col-span-2">
-                        <label class="block text-sm mb-1">Limones usados por michelada</label>
+                        <label class="block text-sm mb-1 text-slate-400">Limones usados por vaso</label>
                         <input type="number" id="usoLimones" placeholder="Ej. 2" class="input-field" oninput="calcular()">
                     </div>
                 </div>
             </div>
 
-            <div class="card">
-                <h2 class="text-xl font-semibold mb-4">🍺 Insumos Líquidos</h2>
+            <div class="card border-l-4 border-blue-500">
+                <h2 class="text-xl font-semibold mb-4">🍺 Insumos Líquidos (ml)</h2>
+                <p class="text-xs text-slate-400 mb-3">Cerveza, Clamato, Salsas negras, Jugo Maggi...</p>
+                
                 <div id="liquidosContainer" class="grid gap-4">
-                    <div class="grid grid-cols-3 gap-2 border-b border-slate-700 pb-2">
-                        <span class="text-xs uppercase col-span-3 text-slate-400 font-bold">Cerveza + Salsas</span>
-                        <input type="number" placeholder="Precio Envase $" class="input-field precioE" oninput="calcular()">
-                        <input type="number" placeholder="ml Totales" class="input-field mlT" oninput="calcular()">
-                        <input type="number" placeholder="ml Usados" class="input-field mlU" oninput="calcular()">
                     </div>
-                </div>
-                <button onclick="agregarFila()" class="mt-4 text-sm accent-color border border-yellow-500/50 px-3 py-1 rounded-full">+ Agregar Ingrediente</button>
+                
+                <button onclick="agregarIngrediente('liquido')" class="mt-5 text-sm font-bold accent-color border-2 border-yellow-500/50 hover:bg-yellow-500/10 px-4 py-2 rounded-full w-full transition-all">
+                    + Agregar Líquido
+                </button>
             </div>
 
-            <div class="card border-2 border-yellow-500">
-                <h2 class="text-center text-sm uppercase font-bold text-slate-400 mb-2">Resumen de Ganancia</h2>
-                <div class="flex justify-between items-center mb-4">
-                    <span class="text-lg">Costo Total Producción:</span>
-                    <span id="costoTotal" class="text-2xl font-bold">$0.00</span>
+            <div class="card border-l-4 border-orange-500">
+                <h2 class="text-xl font-semibold mb-4">🧂 Insumos Granel (mg)</h2>
+                <p class="text-xs text-slate-400 mb-3">Sal de grano, Tajín, Miguelito, Polvos...</p>
+                
+                <div id="solidosContainer" class="grid gap-4">
+                    </div>
+                
+                <button onclick="agregarIngrediente('solido')" class="mt-5 text-sm font-bold accent-color border-2 border-yellow-500/50 hover:bg-yellow-500/10 px-4 py-2 rounded-full w-full transition-all">
+                    + Agregar Polvo/Sal
+                </button>
+            </div>
+
+            <div class="card border-2 border-yellow-500 sticky bottom-4 shadow-xl shadow-yellow-500/20">
+                <h2 class="text-center text-sm uppercase font-bold text-slate-400 mb-4 tracking-wider">Resumen Financiero</h2>
+                
+                <div class="flex justify-between items-end mb-6 bg-slate-800/50 p-3 rounded-lg">
+                    <span class="text-slate-300">Costo Total Producción:</span>
+                    <span id="costoTotal" class="text-3xl font-bold text-white">$0.00</span>
                 </div>
-                <div class="mb-4">
-                    <label class="block text-sm mb-1 text-yellow-500">¿En cuánto la vendes?</label>
-                    <input type="number" id="precioVenta" placeholder="Precio al público" class="input-field text-lg text-center font-bold" oninput="calcular()">
+                
+                <div class="mb-6">
+                    <label class="block text-sm mb-2 text-yellow-500 font-bold">¿Precio de Venta al Público?</label>
+                    <div class="relative">
+                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xl">$</span>
+                        <input type="number" id="precioVenta" placeholder="0.00" class="input-field text-2xl pl-8 font-bold bg-slate-800 focus:border-yellow-500 transition-all" oninput="calcular()">
+                    </div>
                 </div>
+                
                 <div class="grid grid-cols-2 gap-4 text-center">
-                    <div class="bg-slate-800 p-3 rounded-lg">
-                        <p class="text-xs text-slate-400">Ganancia Neta</p>
-                        <p id="gananciaNeta" class="text-xl font-bold text-green-400">$0.00</p>
+                    <div class="bg-green-900/30 border border-green-500/30 p-3 rounded-xl">
+                        <p class="text-xs text-green-300 mb-1 uppercase font-bold">Ganancia Neta</p>
+                        <p id="gananciaNeta" class="text-2xl font-bold text-green-400">$0.00</p>
                     </div>
-                    <div class="bg-slate-800 p-3 rounded-lg">
-                        <p class="text-xs text-slate-400">Margen %</p>
-                        <p id="margenPorcentaje" class="text-xl font-bold text-blue-400">0%</p>
+                    <div class="bg-blue-900/30 border border-blue-500/30 p-3 rounded-xl">
+                        <p class="text-xs text-blue-300 mb-1 uppercase font-bold">Margen Real</p>
+                        <p id="margenPorcentaje" class="text-2xl font-bold text-blue-400">0%</p>
                     </div>
                 </div>
             </div>
 
-        </div>
     </div>
 
     <script>
-        function agregarFila() {
-            const container = document.getElementById('liquidosContainer');
+        // Función unificada para agregar ingredientes (líquidos o sólidos)
+        function agregarIngrediente(tipo) {
+            // 1. Pedir el nombre
+            const nombre = prompt(tipo === 'liquido' ? "Nombre del Líquido (Ej. Salsa Inglesa):" : "Nombre del Polvo/Sal (Ej. Tajín):");
+            if (!nombre) return; // Si cancelan, no hace nada
+
+            // 2. Configurar variables según el tipo
+            const containerId = tipo === 'liquido' ? 'liquidosContainer' : 'solidosContainer';
+            const claseInput = tipo === 'liquido' ? 'liqInput' : 'solInput';
+            const placeholderTotal = tipo === 'liquido' ? 'Envase (ml)' : 'Envase (mg)';
+            const placeholderUsado = tipo === 'liquido' ? 'Usados (ml)' : 'Usados (mg)';
+
+            const container = document.getElementById(containerId);
             const div = document.createElement('div');
-            div.className = "grid grid-cols-3 gap-2 border-b border-slate-700 pb-2 mt-2";
+            div.className = "bg-slate-800/50 p-3 rounded-lg border border-slate-700 relative group";
+
+            // 3. Crear el HTML de la fila con el nombre como etiqueta
             div.innerHTML = `
-                <input type="number" placeholder="Precio Envase $" class="input-field precioE" oninput="calcular()">
-                <input type="number" placeholder="ml Totales" class="input-field mlT" oninput="calcular()">
-                <input type="number" placeholder="ml Usados" class="input-field mlU" oninput="calcular()">
+                <button onclick="this.parentElement.remove(); calcular();" class="absolute top-2 right-2 text-slate-500 hover:text-red-500 font-bold">✕</button>
+                
+                <span class="label-ingrediente">${nombre}</span>
+                
+                <div class="grid grid-cols-3 gap-2">
+                    <div>
+                        <label class="text-[10px] text-slate-400">Costo Envase</label>
+                        <input type="number" placeholder="$" class="input-field precioE ${claseInput}" oninput="calcular()">
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-slate-400">Cont. Total</label>
+                        <input type="number" placeholder="${placeholderTotal}" class="input-field totalU ${claseInput}" oninput="calcular()">
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-slate-400 text-yellow-200">Cant. Usada</label>
+                        <input type="number" placeholder="${placeholderUsado}" class="input-field usadaU ${claseInput}" oninput="calcular()">
+                    </div>
+                </div>
             `;
             container.appendChild(div);
+            // Enfocar el primer input del nuevo elemento
+            div.querySelector('input').focus();
+        }
+
+        function calcularSeccion(claseIdentificadora) {
+            let costoSeccion = 0;
+            const filas = document.querySelectorAll(`.${claseIdentificadora}.precioE`); // Selecciona solo los inputs de precio de ese tipo
+
+            filas.forEach(precioInput => {
+                const filaPadre = precioInput.closest('.grid'); // Encuentra el contenedor padre
+                const totalInput = filaPadre.querySelector('.totalU');
+                const usadaInput = filaPadre.querySelector('.usadaU');
+
+                const precio = parseFloat(precioInput.value) || 0;
+                const total = parseFloat(totalInput.value) || 1; // Evitar división por cero
+                const usado = parseFloat(usadaInput.value) || 0;
+
+                if(total > 0) {
+                     costoSeccion += (precio / total) * usado;
+                }
+            });
+            return costoSeccion;
         }
 
         function calcular() {
-            // Lógica Limón
+            // 1. Cálculo Limón
             const pKg = parseFloat(document.getElementById('precioKg').value) || 0;
             const cKg = parseFloat(document.getElementById('cantidadPorKg').value) || 1;
             const uLim = parseFloat(document.getElementById('usoLimones').value) || 0;
-            const costoLimon = (pKg / cKg) * uLim;
+            const costoLimon = (cKg > 0) ? (pKg / cKg) * uLim : 0;
 
-            // Lógica Líquidos
-            let costoLiquidos = 0;
-            const precios = document.querySelectorAll('.precioE');
-            const totales = document.querySelectorAll('.mlT');
-            const usados = document.querySelectorAll('.mlU');
+            // 2. Cálculo Líquidos y Sólidos usando la función auxiliar
+            const costoLiquidos = calcularSeccion('liqInput');
+            const costoSolidos = calcularSeccion('solInput');
 
-            precios.forEach((p, i) => {
-                const precio = parseFloat(p.value) || 0;
-                const total = parseFloat(totales[i].value) || 1;
-                const usado = parseFloat(usados[i].value) || 0;
-                costoLiquidos += (precio / total) * usado;
-            });
-
-            const totalFinal = costoLimon + costoLiquidos;
+            // 3. Totales
+            const totalFinal = costoLimon + costoLiquidos + costoSolidos;
             document.getElementById('costoTotal').innerText = `$${totalFinal.toFixed(2)}`;
 
-            // Utilidad
+            // 4. Utilidad
             const venta = parseFloat(document.getElementById('precioVenta').value) || 0;
             const neta = venta - totalFinal;
-            const margen = venta > 0 ? (neta / venta) * 100 : 0;
+            // Evitar márgenes negativos locos o división por cero si no hay precio de venta
+            let margen = 0;
+            if (venta > 0) {
+                 margen = (neta / venta) * 100;
+            }
 
             document.getElementById('gananciaNeta').innerText = `$${neta.toFixed(2)}`;
-            document.getElementById('margenPorcentaje').innerText = `${margen.toFixed(1)}%`;
+            // Color dinámico para el margen (rojo si es bajo, azul si es sano)
+            const margenElement = document.getElementById('margenPorcentaje');
+            margenElement.innerText = `${margen.toFixed(1)}%`;
+            
+            if (margen < 30 && venta > 0) {
+                margenElement.classList.remove('text-blue-400');
+                margenElement.classList.add('text-red-400');
+            } else {
+                 margenElement.classList.remove('text-red-400');
+                 margenElement.classList.add('text-blue-400');
+            }
         }
+
+        // Agregar un par de ejemplos al inicio para que no se vea vacío
+        window.onload = function() {
+           // Podrías descomentar esto si quieres que inicie con campos vacíos
+           // agregarIngrediente('liquido'); 
+        };
     </script>
 </body>
 </html>
